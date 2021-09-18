@@ -4,11 +4,10 @@ var validation = new Validation();
 function layDSND() {
     dsnd.layDS()
         .then(function (response) {
-            console.log(response.data);
             hienThiTable(response.data);
         })
         .catch(function (error) {
-            console.log(error);
+            // console.log(error);
         })
 }
 layDSND();
@@ -29,34 +28,42 @@ function themND() {
     var ngonNgu = document.querySelector("#loaiNgonNgu").value;
     var moTa = document.querySelector("#MoTa").value;
 
-    console.log(taiKhoan, hoTen, matKhau, email, hinhAnh, loaiND, ngonNgu, moTa);
+    // console.log(taiKhoan, hoTen, matKhau, email, hinhAnh, loaiND, ngonNgu, moTa);
     var nd = new NguoiDung(taiKhoan, hoTen, matKhau, email, hinhAnh, loaiND, ngonNgu, moTa);
-    console.table(nd);
+    // console.table(nd);
 
-    // Validation
-    var isValid = true;
 
-    isValid &= validation.checkEmpty(taiKhoan, "tbTaiKhoan", "Tài khoản không được để trống");
-    // && validation.checkTK(taiKhoan, "tbTaiKhoan", "Tài khoản đã được xử dụng", dsnd.layDS);
-    isValid &= validation.checkEmpty(hoTen, "tbTen", "Họ tên không được để trống") && validation.checkName(hoTen, "tbTen", "Tên nhân viên phải là ký tự chữ");
-    isValid &= validation.checkEmpty(matKhau, "tbMatKhau", "Mật khẩu không được để trống") && validation.checkPass(matKhau, "tbMatKhau", "Mật khẩu chứa ít nhất 1 ký tự số, 1 ký tự in hoa, 1 ký tự đặc biệt");
-    isValid &= validation.checkEmpty(email, "tbEmail", "Email không được để trống") && validation.checkEmail(email, "tbEmail", "Email không đúng định dạng");
-    isValid &= validation.checkEmpty(hinhAnh, "tbHinhAnh", "Hình ảnh không được để trống");
-    isValid &= validation.checkDropdown("loaiNguoiDung", "tbLoaiND", "Xin vui lòng chọn loại người dùng");
-    isValid &= validation.checkDropdown("loaiNgonNgu", "tbNgonNgu", "Xin vui lòng chọn ngôn ngữ");
-    isValid &= validation.checkEmpty(moTa, "tbMoTa", "Mô tả không được để trống")
+    dsnd.layDS()
+        .then(function (response) {
+            var isValid = true;
 
-    if(isValid){
-        dsnd.them(nd)
-            .then(function (response) {
-                console.log(response.data);
-                layDSND();
-                document.querySelector("#myModal .close").click();
-            })
-            .catch(function (error) {
-                console.log(error);
-            })
-    }
+            isValid &= validation.checkEmpty(taiKhoan, "tbTaiKhoan", "Tài khoản không được để trống") && validation.checkTK(taiKhoan, "tbTaiKhoan", "Tài khoản đã được xử dụng", response.data);
+            isValid &= validation.checkEmpty(hoTen, "tbTen", "Họ tên không được để trống") && validation.checkName(hoTen, "tbTen", "Tên nhân viên phải là ký tự chữ");
+            isValid &= validation.checkEmpty(matKhau, "tbMatKhau", "Mật khẩu không được để trống") && validation.checkPass(matKhau, "tbMatKhau", "Mật khẩu chứa ít nhất 1 ký tự số, 1 ký tự in hoa, 1 ký tự đặc biệt");
+            isValid &= validation.checkEmpty(email, "tbEmail", "Email không được để trống") && validation.checkEmail(email, "tbEmail", "Email không đúng định dạng");
+            isValid &= validation.checkEmpty(hinhAnh, "tbHinhAnh", "Hình ảnh không được để trống");
+            isValid &= validation.checkDropdown("loaiNguoiDung", "tbLoaiND", "Xin vui lòng chọn loại người dùng");
+            isValid &= validation.checkDropdown("loaiNgonNgu", "tbNgonNgu", "Xin vui lòng chọn ngôn ngữ");
+            isValid &= validation.checkEmpty(moTa, "tbMoTa", "Mô tả không được để trống") && validation.checkDesc(moTa, "tbMoTa", "Mô tả không được vượt quá 60 ký tự");
+            
+            if (isValid) {
+                dsnd.them(nd)
+                    .then(function (response) {
+                        console.log(response.data);
+                        layDSND();
+                        document.querySelector("#myModal .close").click();
+                    })
+                    .catch(function (error) {
+                        // console.log(error);
+                    })
+            }
+        })
+
+        .catch(function (error) {
+            // console.log(error);
+        });
+
+
 };
 
 function hienThiTable(mangSP) {
@@ -86,7 +93,7 @@ function hienThiTable(mangSP) {
 function layChiTiet(id) {
     dsnd.layND(id)
         .then(function (response) {
-            console.log(response.data);
+            // console.log(response.data);
             document.querySelector("#TaiKhoan").value = response.data.taiKhoan;
             document.querySelector("#HoTen").value = response.data.hoTen;
             document.querySelector("#MatKhau").value = response.data.matKhau;
@@ -100,11 +107,11 @@ function layChiTiet(id) {
             `
         })
         .catch(function (error) {
-            console.log(error);
+            // console.log(error);
         })
 }
 
-function capNhat(id){
+function capNhat(id) {
     var taiKhoan = document.querySelector("#TaiKhoan").value;
     var hoTen = document.querySelector("#HoTen").value;
     var matKhau = document.querySelector("#MatKhau").value;
@@ -114,27 +121,27 @@ function capNhat(id){
     var ngonNgu = document.querySelector("#loaiNgonNgu").value;
     var moTa = document.querySelector("#MoTa").value;
 
-    console.log(taiKhoan, hoTen, matKhau, email, hinhAnh, loaiND, ngonNgu, moTa);
+    // console.log(taiKhoan, hoTen, matKhau, email, hinhAnh, loaiND, ngonNgu, moTa);
     var nd = new NguoiDung(taiKhoan, hoTen, matKhau, email, hinhAnh, loaiND, ngonNgu, moTa);
-    console.table(nd);
-    dsnd.capNhatND(nd,id)
-    .then(function(response){
-        console.log(response.data);
-        layDSND();
-        document.querySelector(".modal-header .close").click();
-    })
-    .catch(function(error){
-        console.log(error);
-    })
+    // console.table(nd);
+    dsnd.capNhatND(nd, id)
+        .then(function (response) {
+            // console.log(response.data);
+            layDSND();
+            document.querySelector(".modal-header .close").click();
+        })
+        .catch(function (error) {
+            // console.log(error);
+        })
 }
 
-function xoa(id){
+function xoa(id) {
     dsnd.xoaND(id)
-    .then(function(response){
-        console.log(response.data);
-        layDSND();
-    })
-    .catch(function(error){
-        console.log(error);
-    })
+        .then(function (response) {
+            // console.log(response.data);
+            layDSND();
+        })
+        .catch(function (error) {
+            // console.log(error);
+        })
 }
